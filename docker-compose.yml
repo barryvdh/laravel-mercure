@@ -1,0 +1,30 @@
+services:
+    mercure:
+        image: dunglas/mercure:v1.0.0-alpha.3
+        restart: unless-stopped
+        environment:
+            SERVER_NAME: ":3000"
+            MERCURE_PUBLISHER_JWT_KEY: "${MERCURE_JWT_SECRET}"
+            MERCURE_PUBLISHER_JWT_ALG: HS256
+            MERCURE_SUBSCRIBER_JWT_KEY: "${MERCURE_JWT_SECRET}"
+            MERCURE_SUBSCRIBER_JWT_ALG: HS256
+            MERCURE_TRUSTED_ISSUERS: "${MERCURE_JWT_ISSUER}"
+            # `anonymous` lets a subscriber connect with no token at all — the intended
+            # setup for public channels: the connect-time gate is dropped, but delivery
+            # of privately-published Updates still requires a matching
+            # authorization_details grant, so private/presence channels stay secure
+            # regardless. `subscriptions` powers the presence-channel demo
+            # (active-subscriptions feature); `cors_origins` lets the app's origin (a
+            # different port, so a different origin even on localhost) open
+            # credentialed EventSource/fetch requests against the hub. `cookie_name`
+            # drops the spec-default "__Secure-" prefix, which browsers refuse to store
+            # without HTTPS — matches MERCURE_COOKIE_NAME on the Laravel side; don't
+            # set either in an HTTPS deployment, the spec-default name is the right one
+            # there.
+            MERCURE_EXTRA_DIRECTIVES: |
+                anonymous
+                subscriptions
+                cors_origins ${APP_URL}
+                cookie_name mercure_access_token
+        ports:
+            - "3001:3000"
