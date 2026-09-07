@@ -10,7 +10,7 @@ No WebSocket server to run: the Mercure hub is a single binary (here, a Docker c
 
 ## Requirements
 
-The work in progress lives on branches across four sibling checkouts, wired together with Composer path repositories and an npm `file:` dependency:
+The framework and Echo changes are submitted upstream as [laravel/framework PR #61474](https://github.com/laravel/framework/pull/61474) and [laravel/echo PR #549](https://github.com/laravel/echo/pull/549). Until they are merged, the work lives on branches across four sibling checkouts, wired together with Composer path repositories and an npm `file:` dependency:
 
 ```
 ├── framework        dunglas/framework, branch feat/mercure-broadcaster
